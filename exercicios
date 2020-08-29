@@ -1,0 +1,162 @@
+---Fazer um algoritmo que, dado um CPF diga se é válido
+
+CREATE FUNCTION CPF_VALIDO(@CPF VARCHAR(11))
+RETURNS CHAR(1)
+AS
+BEGIN
+  DECLARE @INDICE INT,
+          @SOMA INT,
+          @DIG1 INT,
+          @DIG2 INT,
+          @CPF_TEMP VARCHAR(11),
+          @DIGITOS_IGUAIS CHAR(1),
+          @RESULTADO CHAR(1)
+          
+  SET @RESULTADO = 'N'
+
+
+  SET @CPF_TEMP = SUBSTRING(@CPF,1,1)
+
+  SET @INDICE = 1
+  SET @DIGITOS_IGUAIS = 'S'
+
+  WHILE (@INDICE <= 11)
+  BEGIN
+    IF SUBSTRING(@CPF,@INDICE,1) <> @CPF_TEMP
+      SET @DIGITOS_IGUAIS = 'N'
+    SET @INDICE = @INDICE + 1
+  END;
+
+  
+  IF @DIGITOS_IGUAIS = 'N'
+  BEGIN
+    
+    SET @SOMA = 0
+    SET @INDICE = 1
+    WHILE (@INDICE <= 9)
+    BEGIN
+      SET @Soma = @Soma + CONVERT(INT,SUBSTRING(@CPF,@INDICE,1)) * (11 - @INDICE);
+      SET @INDICE = @INDICE + 1
+    END
+
+    SET @DIG1 = 11 - (@SOMA % 11)
+
+    IF @DIG1 > 9
+      SET @DIG1 = 0;
+
+    SET @SOMA = 0
+    SET @INDICE = 1
+    WHILE (@INDICE <= 10)
+    BEGIN
+      SET @Soma = @Soma + CONVERT(INT,SUBSTRING(@CPF,@INDICE,1)) * (12 - @INDICE);
+      SET @INDICE = @INDICE + 1
+    END
+
+    SET @DIG2 = 11 - (@SOMA % 11)
+
+    IF @DIG2 > 9
+      SET @DIG2 = 0;
+
+    IF (@DIG1 = SUBSTRING(@CPF,LEN(@CPF)-1,1)) AND (@DIG2 = SUBSTRING(@CPF,LEN(@CPF),1))
+      SET @RESULTADO = 'S'
+    ELSE
+      SET @RESULTADO = 'N'
+  END
+  RETURN @RESULTADO
+END
+
+
+- - Fazer um algoritmo que calcula os 15 primeiros termos da série de Fibonacci e o soma dos 15 primeiros termos
+- - Série de Fibonacci: 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89 ...
+
+
+DECLARAR @num		 INT ,
+		@numant		 INT ,
+		@proxnum	 INT ,
+		@soma		 INT ,
+		@cont		 INT
+
+SET @num =  1
+SET @numant =  0
+SET @soma =  0
+SET @cont =  0
+
+ENQUANTO (@cont < 15 )
+INÍCIO
+	SET @cont = @cont +  1
+	SET @soma = @soma + @num
+	PRINT  ' Número ('  +  CAST (@cont AS  VARCHAR ( 2 )) +  ' ):'  + 
+	CAST (@num AS  VARCHAR ( 3 )) +  ' . Soma: '  + 
+	CAST (@soma AS  VARCHAR ( 5 )) +  ' .'
+	SET @proxnum = @num + @numant
+	SET @numant = @num
+	SET @num = @proxnum
+FIM
+
+
+- - Fazer um algoritmo que, dados 3 números, mostre o maior e o menor
+
+DECLARAR @ num1		 INT ,
+		@ num2		 INT ,
+		@ num3		 INT ,
+		@maior		 INT ,
+		@menor		 INT
+
+SET @ num1 =  37
+SET @ num2 =  100
+SET @ num3 =  200
+
+SE (@ num1 > @ num2)
+INÍCIO
+	SET @maior = @ num1
+	SET @menor = @ num2
+FIM
+OUTRO
+INÍCIO
+	SET @maior = @ num2
+	SET @menor = @ num1
+FIM
+
+IF (@maior < @ num3)
+INÍCIO
+	SET @maior = @ num3
+FIM
+IF (@menor > @ num3)
+INÍCIO
+	SET @menor = @ num3
+FIM
+
+PRINT  ' O maior dos números são'  +  CAST (@maior   AS  VARCHAR ( 3 )) +  ' .'
+PRINT  ' O menor dos números são'  +  CAST (@menor   AS  VARCHAR ( 3 )) +  ' .'
+
+
+-----Fazer um algoritmo que verifica, dada uma palavra, se é, ou não, palíndromo
+
+DECLARE @palavra		VARCHAR(1024),
+		@reversa		VARCHAR(1024),
+		@letra			CHAR(1),
+		@posicao		INT
+
+SET @palavra = 'ME VÊ SE A PANELA DA MOÇA É DE AÇO MADALENA PAES, E VEM'
+
+SET @palavra = UPPER(@palavra)
+SET @reversa = ''
+SET @posicao = 0
+
+WHILE(@posicao < LEN(@palavra))
+BEGIN
+	SET @posicao = @posicao + 1
+	SET @letra = SUBSTRING(@palavra, @posicao, 1)
+	SET @reversa = @letra + @reversa
+END
+IF(@palavra = @reversa)
+BEGIN
+	PRINT 'A palavra '+@palavra+' é um palíndromo.'
+END
+ELSE
+BEGIN
+	PRINT 'A palavra '+@palavra+' Não é um palíndromo.'
+END
+
+
+
