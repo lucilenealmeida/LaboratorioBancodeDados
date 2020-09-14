@@ -1,0 +1,27 @@
+Create PROCEDURE [dbo].[pcdAluno_Slc]
+AS
+BEGIN
+     
+    select a.idaluno, a.nome, a.email, a.dtcadastro, a.valor, 
+           c.idcurso, descricao_curso = c.descricao  
+    from alunos a 
+        inner join cursos c on c.idcurso = a.idcurso 
+        order by a.nome
+             
+END
+GO
+
+
+Create PROCEDURE [dbo].[pcdAluno_SlcID]
+@idaluno                INT
+AS
+BEGIN
+     
+    select a.idaluno, a.nome, a.email, a.dtcadastro, a.valor, 
+           c.idcurso, descricao_curso = c.descricao  
+    from alunos a 
+        inner join cursos c on c.idcurso = a.idcurso 
+        where idaluno = @idaluno
+         
+END
+GO
